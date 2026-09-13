@@ -1,2 +1,2 @@
-message = "Hello from main"
+message = "Hello from A"
 print(message)
