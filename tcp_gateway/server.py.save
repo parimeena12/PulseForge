@@ -1,0 +1,28 @@
+import socket
+
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+server.bind(('localhost',5000))
+server.listen()
+
+print("TCP Gateway listening on port 5000")
+
+connection, address = server.accept()
+
+print("Device Connected:",address)
+
+buffer  = b""
+
+while True:
+      data = connection.recv(1024)
+      if not data:
+         break
+
+      buffer  += data
+      while b"\n" in buffer:
+          raw_packet, buffer = buffer.split(b"\n",1)
+          print("Completed packet:",raw_packet)
+
+
+connection.close()
+server.close()

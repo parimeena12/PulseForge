@@ -1,0 +1,49 @@
+y  GNU nano 8.7.1             tcp_gateway/client.py *
+import socket
+import time
+import sys
+
+device_id = sys.argv[1]
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+client.connect(('localhost',5000))
+
+print(f"{device_id} connected to gateway")
+print("Connected to gateway")
+
+packet = f"PF01|device-001|123|25.5|60.0|12.0|ABC|184\n".encode()
+
+try:
+   while True:
+      client.send(packet)
+      print(f"{device_id}: Telemetry sent")
+      print("Telemetry sent")
+      time.sleep(3)
+except KeyboardInterrupt:
+   print(f"{device_id} shutting down")
+
+finally:
+   client.close()
+
+
+import socket
+import time
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+client.connect(('localhost',5000))
+
+print("Connected to gateway")
+
+packet = b"PF01|device-001|123|25.5|60.0|12.0|ABC|184\n"
+try:
+   while True:
+      client.send(packet)
+
+      print("Telemetry sent")
+
+      time.sleep(3)
+except KeyboardInterrupt:
+   print("Device shutting down")
+
+finally:
+   client.close()
