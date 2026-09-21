@@ -18,7 +18,7 @@ try:
 
       print(f"{device_id}: Telemetry sent")
 
-      time.sleep(3)
+      time.sleep(0.5)
 except KeyboardInterrupt:
    print(f"{device_id} shutting down")
 
