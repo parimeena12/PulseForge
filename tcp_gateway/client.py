@@ -1,26 +1,27 @@
 import socket
 import time
-import sys
-from protocol import build_packet
 
-device_id = sys.argv[1]
+HOST = "localhost"
+PORT = 5000
 
-client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect(('localhost',5000))
-
-print(f"{device_id} Connected to gateway")
-
-packet = build_packet( device_id, 123,25.5,60.0,12.0,"ABC")
 try:
-   while True:
-      client.send(packet.encode("utf-8"))
+    client.connect((HOST, PORT))
+    print("Connected to TCP Gateway")
 
-      print(f"{device_id}: Telemetry sent")
+    while True:
+        packet = b"PF01|device-001|123|25.5|60.0|12.0|ABC|184\n"
 
-      time.sleep(0.5)
-except KeyboardInterrupt:
-   print(f"{device_id} shutting down")
+        client.send(packet)
+
+        print("Packet sent:", packet)
+
+        time.sleep(2)
+
+except ConnectionError as e:
+    print("Connection error:", e)
 
 finally:
-   client.close()
+    client.close()
+    print("Client connection closed")
